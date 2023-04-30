@@ -1,0 +1,9 @@
+server:
+  port: 8100
+
+zuul:
+  sensitiveHeaders: Cookie,Set-Cookie
+  routes:
+    pager-resource:
+      path: /pager/**
+      url: http://localhost:8080/
