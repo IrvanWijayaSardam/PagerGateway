@@ -2,8 +2,24 @@ server:
   port: 8100
 
 zuul:
-  sensitiveHeaders: Cookie,Set-Cookie
   routes:
     pager-resource:
-      path: /pager/**
-      url: http://localhost:8080/
+      path: /pager-service/**
+      url: http://localhost:8080/api/
+      sensitive-headers:
+        - Cookie,Set-Cookie
+    user-resource:
+      path: /user-service/**
+      url: http://localhost:8080/api/
+    host:
+      connect-timeout-millis: 2000
+      socket-timeout-millis: 5000
+
+management:
+    endpoints:
+      web:
+        exposure:
+          include: '*'
+    endpoint:
+      health:
+        show-details: ALWAYS
