@@ -31,18 +31,14 @@ public class Prefilter extends ZuulFilter {
         return true;
     }
 
+
     @Override
     public Object run() {
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletRequest request = ctx.getRequest();
-
-        String header = request.getHeader("Instansi-Id");
-
-        if(request.getRequestURL().toString().equals("http://localhost:8100/pager-service/pager")){
-            ctx.addZuulRequestHeader("Request-Id", AuthKey.getKey());
-            log.info("Request method = {}, url = {}", request.getMethod(), request.getRequestURL().toString());
-        }
+        ctx.addZuulRequestHeader("Request-Id", AuthKey.getKey());
 
         return null;
+
     }
 }

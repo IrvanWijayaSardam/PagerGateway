@@ -27,12 +27,36 @@ public class Routefilter extends ZuulFilter {
     }
     @Override
     public Object run() {
-
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletRequest request = ctx.getRequest();
+        String header = request.getHeader("Instansi-Id");
 
-
-
+        if ("123".equals(header)) {
+            ctx.put("serviceId", "server-one-service");
+            try {
+                ctx.setRouteHost(new URL("http://localhost:8080/api/"));
+                log.info(String.format("request host %s", ctx.getRouteHost().toString()));
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
+            }
+        } else if ("234".equals(header)) {
+            ctx.put("serviceId", "server-two-service");
+            try {
+                ctx.setRouteHost(new URL("http://localhost:8001"));
+                log.info(String.format("request host %s", ctx.getRouteHost().toString()));
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        else { // "YOUR_B_LOGIC"
+            ctx.put("serviceId", "user-service");
+            try {
+                ctx.setRouteHost(new URL("UNAUTHORIZED"));
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        log.info(String.format("%s request to %s", request.getMethod(), request.getRequestURL().toString()));
         log.info("Inside route filter..");
         return null;
     }
